@@ -53,12 +53,13 @@ export default function FanoosApp() {
   return (
     <main style={{ 
       minHeight: '100vh', backgroundColor: currentBg, transition: '0.4s', direction: 'rtl', 
-      fontFamily: '"Vazirmatn", sans-serif'
+      fontFamily: '"Vazirmatn", sans-serif', WebkitFontSmoothing: 'antialiased'
     }}>
       
       <style>{`
         @import url('https://fonts.googleapis.com/css2?family=Vazirmatn:wght@400;500;700;900&display=swap');
         ::-webkit-scrollbar { display: none; }
+        html { scroll-behavior: smooth; -webkit-overflow-scrolling: touch; }
       `}</style>
       
       {openDrawer && <div onClick={() => setOpenDrawer(null)} style={{ position: 'fixed', inset: 0, zIndex: 10, backgroundColor: 'rgba(0,0,0,0.1)', backdropFilter: 'blur(2px)' }} />}
@@ -67,10 +68,8 @@ export default function FanoosApp() {
         <h1 style={{ fontFamily: '"Vazirmatn", sans-serif', color: themeColor, fontSize: '45px', fontWeight: '900', margin: 0 }}>فـانـوس</h1>
       </div>
 
-      {/* تغییر مهم: عرض 100٪ و پدینگ کمتر برای لبه‌به‌لبه شدن */}
       <div style={{ padding: '20px 12px', display: 'flex', flexDirection: 'column', gap: '20px', paddingBottom: '160px', maxWidth: '480px', margin: '0 auto', width: '100%', boxSizing: 'border-box' }}>
         
-        {/* بخش جستجو - اصلاح شد */}
         <div style={{ position: 'relative', marginBottom: '10px' }}>
           <input 
             type="text"
@@ -87,7 +86,7 @@ export default function FanoosApp() {
               fontFamily: 'inherit',
               outline: 'none',
               boxShadow: isDarkMode ? 'none' : '0 10px 30px rgba(0,0,0,0.03)',
-              border: searchQuery ? `1.5px solid ${themeColor}` : '1.5px solid transparent', // اینجا فقط یک border داریم
+              border: searchQuery ? `1.5px solid ${themeColor}` : '1.5px solid transparent',
               transition: '0.3s',
               boxSizing: 'border-box'
             }}
@@ -129,7 +128,8 @@ export default function FanoosApp() {
         )}
       </div>
 
-      <div style={{ position: 'fixed', bottom: '30px', left: '50%', transform: 'translateX(-50%)', width: '90%', maxWidth: '380px', zIndex: 20 }}>
+      {/* اصلاح منو: تراز وسط و منطق رنگ */}
+      <div style={{ position: 'fixed', bottom: '30px', left: '0', right: '0', margin: '0 auto', width: '90%', maxWidth: '380px', zIndex: 20 }}>
         
         <div style={{ 
           width: '280px', margin: '0 auto 15px', 
@@ -175,7 +175,7 @@ export default function FanoosApp() {
           {openDrawer === 'color' && (
             <div style={{ display: 'flex', justifyContent: 'center', flexWrap: 'wrap', gap: '12px', padding: '10px 0 20px' }}>
               {colors.map(c => (
-                <div key={c.main} onClick={() => {setThemeColor(c.main); setBgColor(c.bg); setActiveTab('color'); setOpenDrawer(null)}} 
+                <div key={c.main} onClick={() => {setThemeColor(c.main); setBgColor(c.bg); setOpenDrawer(null)}} 
                   style={{ width: '38px', height: '38px', borderRadius: '12px', backgroundColor: c.main, cursor: 'pointer', transition: '0.3s' }}
                 />
               ))}
@@ -184,7 +184,7 @@ export default function FanoosApp() {
         </div>
 
         <nav style={{ 
-          backgroundColor: isDarkMode ? 'rgba(30, 30, 30, 0.4)' : 'rgba(255, 255, 255, 0.7)', 
+          backgroundColor: isDarkMode ? 'rgba(30, 30, 30, 0.7)' : 'rgba(255, 255, 255, 0.85)', 
           backdropFilter: 'blur(20px)', height: '80px', borderRadius: '25px', display: 'flex', 
           justifyContent: 'space-around', alignItems: 'center', padding: '0 10px',
           boxShadow: '0 10px 40px rgba(0,0,0,0.1)', border: '1px solid rgba(255,255,255,0.2)', width: '100%'
@@ -199,9 +199,9 @@ export default function FanoosApp() {
             <span style={{...navText, color: (activeTab === 'cat' || openDrawer === 'cat') ? themeColor : '#888'}}>{selectedCategory && selectedCategory !== 'همه' ? selectedCategory : 'دسته'}</span>
           </div>
 
-          <div onClick={() => setOpenDrawer(openDrawer === 'color' ? null : 'color')} style={{ ...navItem, color: (activeTab === 'color' || openDrawer === 'color') ? themeColor : '#ccc' }}>
+          <div onClick={() => setOpenDrawer(openDrawer === 'color' ? null : 'color')} style={{ ...navItem, color: (openDrawer === 'color') ? themeColor : '#ccc' }}>
             <svg width="24" height="24" fill="none" stroke="currentColor" strokeWidth="2.5" viewBox="0 0 24 24"><path d="M7 21a4 4 0 01-4-4V5a2 2 0 012-2h4a2 2 0 012 2v12a4 4 0 01-4 4zm0 0h12a2 2 0 002-2v-4a2 2 0 00-2-2h-2.343M11 7.343l1.657-1.657a2 2 0 012.828 0l2.829 2.829a2 2 0 010 2.828l-8.486 8.485M7 17h.01"/></svg>
-            <span style={{...navText, color: (activeTab === 'color' || openDrawer === 'color') ? themeColor : '#888'}}>رنگ</span>
+            <span style={{...navText, color: (openDrawer === 'color') ? themeColor : '#888'}}>رنگ</span>
           </div>
 
           <div onClick={() => {setIsDarkMode(!isDarkMode); setOpenDrawer(null)}} style={{ ...navItem }}>
@@ -225,15 +225,17 @@ function PostCard({ post, index, fontSize, themeColor, isDarkMode, onTagClick }:
 
   return (
     <motion.article 
-      initial={{ opacity: 0, y: 30 }} animate={{ opacity: 1, y: 0 }} transition={{ delay: index * 0.1 }}
-      onMouseEnter={() => setIsHovered(true)} onMouseLeave={() => setIsHovered(false)}
+      initial={{ opacity: 0, y: 20 }} 
+      animate={{ opacity: 1, y: 0 }} 
+      transition={{ delay: index * 0.05, duration: 0.4 }}
       style={{ 
         backgroundColor: isDarkMode ? '#1e1e1e' : 'white', 
-        padding: '20px', // پدینگ کارت هم کمتر شد برای فضای بیشتر
+        padding: '20px',
         borderRadius: '30px', position: 'relative', overflow: 'hidden',
         border: isDarkMode ? '1px solid #333' : '1px solid rgba(0,0,0,0.02)',
-        boxShadow: isDarkMode ? '0 8px 30px rgba(0,0,0,0.2)' : '0 8px 30px rgba(0,0,0,0.04)', transition: '0.3s',
-        width: '100%', boxSizing: 'border-box'
+        boxShadow: isDarkMode ? '0 8px 30px rgba(0,0,0,0.2)' : '0 8px 30px rgba(0,0,0,0.04)',
+        width: '100%', boxSizing: 'border-box',
+        willChange: 'transform, opacity'
       }}
     >
       <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center', marginBottom: '18px' }}>
@@ -252,7 +254,7 @@ function PostCard({ post, index, fontSize, themeColor, isDarkMode, onTagClick }:
       </div>
 
       <div style={{ height: '45px', display: 'flex', alignItems: 'center', justifyContent: 'space-between', borderTop: isDarkMode ? '1px solid #333' : '1px solid #f5f5f5', marginTop: '10px', paddingTop: '10px' }}>
-        <div style={{ display: 'flex', gap: '22px', opacity: isHovered ? 1 : 0, transform: isHovered ? 'translateY(0)' : 'translateY(20px)', transition: 'all 0.5s cubic-bezier(0.175, 0.885, 0.32, 1.275)' }}>
+        <div style={{ display: 'flex', gap: '22px' }}>
           <button onClick={() => setIsLiked(!isLiked)} style={{ ...btnStyle, color: isLiked ? themeColor : '#ccc' }}>
              <svg width="20" height="20" fill={isLiked ? "currentColor" : "none"} stroke="currentColor" strokeWidth="2" viewBox="0 0 24 24"><path d="M12 21.35l-1.45-1.32C5.4 15.36 2 12.28 2 8.5 2 5.42 4.42 3 7.5 3c1.74 0 3.41.81 4.5 2.09C13.09 3.81 14.76 3 16.5 3 19.58 3 22 5.42 22 8.5c0 3.78-3.4 6.86-8.55 11.54L12 21.35z"/></svg>
           </button>
@@ -263,7 +265,7 @@ function PostCard({ post, index, fontSize, themeColor, isDarkMode, onTagClick }:
              <svg width="20" height="20" fill="none" stroke="currentColor" strokeWidth="2" viewBox="0 0 24 24"><path d="M8 16H6a2 2 0 01-2-2V6a2 2 0 012-2h8a2 2 0 012 2v2m-6 12h8a2 2 0 002-2v-8a2 2 0 00-2-2h-8a2 2 0 00-2 2v8a2 2 0 002 2z"/></svg>
           </button>
         </div>
-        <span style={{ color: '#aaa', fontSize: '10px', fontWeight: '700', opacity: isHovered ? 1 : 0.6, transition: '0.3s' }}>{post.readTime} مطالعه</span>
+        <span style={{ color: '#aaa', fontSize: '10px', fontWeight: '700' }}>{post.readTime} مطالعه</span>
       </div>
     </motion.article>
   );
