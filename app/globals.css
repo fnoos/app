@@ -1,0 +1,25 @@
+@import url('https://cdn.jsdelivr.net/gh/rastikerdar/vazirmatn@v33.003/Vazirmatn-font-face.css');
+
+@tailwind base;
+@tailwind components;
+@tailwind utilities;
+
+:root {
+  --main-bg: #f9fafb;
+  --fanoos-purple: #8b5cf6;
+}
+
+body {
+  background-color: var(--main-bg);
+  font-family: 'Vazirmatn', sans-serif !important;
+  direction: rtl;
+}
+
+/* کارت‌های شیشه‌ای فانوس */
+.glass-card {
+  background: rgba(255, 255, 255, 0.7);
+  backdrop-filter: blur(12px);
+  border: 1px solid rgba(255, 255, 255, 0.4);
+  border-radius: 32px;
+  box-shadow: 0 8px 32px rgba(0, 0, 0, 0.02);
+}
