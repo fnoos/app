@@ -128,8 +128,8 @@ export default function FanoosApp() {
         )}
       </div>
 
-      {/* اصلاح منو: تراز وسط و منطق رنگ */}
-      <div style={{ position: 'fixed', bottom: '30px', left: '0', right: '0', margin: '0 auto', width: '90%', maxWidth: '380px', zIndex: 20 }}>
+      {/* بخش اصلاح شده منو و تراز */}
+      <div style={{ position: 'fixed', bottom: '30px', left: '50%', transform: 'translateX(-50%)', width: '90%', maxWidth: '380px', zIndex: 20 }}>
         
         <div style={{ 
           width: '280px', margin: '0 auto 15px', 
@@ -221,21 +221,19 @@ export default function FanoosApp() {
 
 function PostCard({ post, index, fontSize, themeColor, isDarkMode, onTagClick }: any) {
   const [isLiked, setIsLiked] = useState(false);
-  const [isHovered, setIsHovered] = useState(false);
 
   return (
     <motion.article 
-      initial={{ opacity: 0, y: 20 }} 
-      animate={{ opacity: 1, y: 0 }} 
-      transition={{ delay: index * 0.05, duration: 0.4 }}
+      initial={{ opacity: 0, scale: 0.95 }} 
+      animate={{ opacity: 1, scale: 1 }} 
+      transition={{ delay: index * 0.03, duration: 0.3 }}
       style={{ 
         backgroundColor: isDarkMode ? '#1e1e1e' : 'white', 
         padding: '20px',
         borderRadius: '30px', position: 'relative', overflow: 'hidden',
         border: isDarkMode ? '1px solid #333' : '1px solid rgba(0,0,0,0.02)',
         boxShadow: isDarkMode ? '0 8px 30px rgba(0,0,0,0.2)' : '0 8px 30px rgba(0,0,0,0.04)',
-        width: '100%', boxSizing: 'border-box',
-        willChange: 'transform, opacity'
+        width: '100%', boxSizing: 'border-box'
       }}
     >
       <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center', marginBottom: '18px' }}>
