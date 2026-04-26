@@ -12,9 +12,8 @@ export default function FanoosApp() {
   const [bgColor, setBgColor] = useState('#f0f9f6');
   const [selectedCategory, setSelectedCategory] = useState<string | null>(null);
   const [selectedTag, setSelectedTag] = useState<string | null>(null);
-  const [searchQuery, setSearchQuery] = useState(''); // وضعیت جدید برای جستجو
+  const [searchQuery, setSearchQuery] = useState('');
 
-  // قفل کردن اسکرول صفحه اصلی
   useEffect(() => {
     if (openDrawer) {
       document.body.style.overflow = 'hidden';
@@ -38,12 +37,11 @@ export default function FanoosApp() {
     { id: 2, cat: 'حکمت', tags: ['#نور', '#راه'], text: 'فانوسِ راهِ دیگران باش؛ اینگونه است که مسیرِ خودت هم همیشه پرنور خواهد ماند.', readTime: '۱۵ ثانیه', date: '۱۴۰۵/۰۲/۰۵' },
     { id: 3, cat: 'حال خوب', tags: ['#امید', '#لبخند'], text: 'امروز یک لبخند به کسی هدیه بده. شاید همین کوچک‌ترین کار، بزرگ‌ترین تغییر در روزِ او باشد.', readTime: '۱۰ ثانیه', date: '۱۴۰۵/۰۲/۰۴' },
     { id: 4, cat: 'داستان', tags: ['#دانش', '#فروتنی'], text: 'عارفی را پرسیدند: از که آموختی؟ گفت: از آن کس که ندانست و گفت نمی‌دانم؛ او بزرگ‌ترین آموزگارِ من بود.', readTime: '۲۵ ثانیه', date: '۱۴۰۵/۰۲/۰۳' },
-    { id: 5, cat: 'نیایش', tags: ['#دعا', '#آرامش'], text: 'خدایا، در دریای متلاطم زندگی، فانوسِ نگاهت را از ما مگیر که بی‌تو، گم‌گشته‌ای بیش نیستیم.', readTime: '۱۸ ثانیه', date: '۱۴۰۵/۰۲/۰۲' }
+    { id: 5, cat: 'نیایش', tags: ['#دعا', '# آرامش'], text: 'خدایا، در دریای متلاطم زندگی، فانوسِ نگاهت را از ما مگیر که بی‌تو، گم‌گشته‌ای بیش نیستیم.', readTime: '۱۸ ثانیه', date: '۱۴۰۵/۰۲/۰۲' }
   ];
 
   const currentBg = isDarkMode ? '#121212' : bgColor;
 
-  // منطق فیلتر کردن پست‌ها
   const filteredPosts = postsData
     .filter(p => !selectedCategory || selectedCategory === 'همه' || p.cat === selectedCategory)
     .filter(p => !selectedTag || p.tags.includes(selectedTag))
@@ -65,13 +63,14 @@ export default function FanoosApp() {
       
       {openDrawer && <div onClick={() => setOpenDrawer(null)} style={{ position: 'fixed', inset: 0, zIndex: 10, backgroundColor: 'rgba(0,0,0,0.1)', backdropFilter: 'blur(2px)' }} />}
 
-      <div style={{ padding: '40px 20px 10px', textAlign: 'center' }}>
+      <div style={{ padding: '40px 10px 10px', textAlign: 'center' }}>
         <h1 style={{ fontFamily: '"Vazirmatn", sans-serif', color: themeColor, fontSize: '45px', fontWeight: '900', margin: 0 }}>فـانـوس</h1>
       </div>
 
-      <div style={{ padding: '20px', display: 'flex', flexDirection: 'column', gap: '20px', paddingBottom: '160px', maxWidth: '500px', margin: '0 auto' }}>
+      {/* تغییر مهم: عرض 100٪ و پدینگ کمتر برای لبه‌به‌لبه شدن */}
+      <div style={{ padding: '20px 12px', display: 'flex', flexDirection: 'column', gap: '20px', paddingBottom: '160px', maxWidth: '480px', margin: '0 auto', width: '100%', boxSizing: 'border-box' }}>
         
-        {/* بخش جستجو */}
+        {/* بخش جستجو - اصلاح شد */}
         <div style={{ position: 'relative', marginBottom: '10px' }}>
           <input 
             type="text"
@@ -82,15 +81,15 @@ export default function FanoosApp() {
               width: '100%',
               padding: '16px 20px',
               borderRadius: '22px',
-              border: 'none',
               backgroundColor: isDarkMode ? 'rgba(255,255,255,0.05)' : 'rgba(255,255,255,0.9)',
               color: isDarkMode ? '#fff' : '#333',
               fontSize: '14px',
               fontFamily: 'inherit',
               outline: 'none',
               boxShadow: isDarkMode ? 'none' : '0 10px 30px rgba(0,0,0,0.03)',
-              border: searchQuery ? `1.5px solid ${themeColor}` : '1.5px solid transparent',
-              transition: '0.3s'
+              border: searchQuery ? `1.5px solid ${themeColor}` : '1.5px solid transparent', // اینجا فقط یک border داریم
+              transition: '0.3s',
+              boxSizing: 'border-box'
             }}
           />
           {searchQuery && (
@@ -103,7 +102,6 @@ export default function FanoosApp() {
           )}
         </div>
 
-        {/* نوار وضعیت فیلتر هشتگ */}
         <AnimatePresence>
           {selectedTag && (
             <motion.div initial={{ opacity: 0, y: -10 }} animate={{ opacity: 1, y: 0 }} exit={{ opacity: 0, y: -10 }}
@@ -114,7 +112,6 @@ export default function FanoosApp() {
           )}
         </AnimatePresence>
 
-        {/* لیست پست‌ها */}
         {filteredPosts.length > 0 ? (
           filteredPosts.map((post, index) => (
             <PostCard 
@@ -132,9 +129,8 @@ export default function FanoosApp() {
         )}
       </div>
 
-      <div style={{ position: 'fixed', bottom: '30px', left: '50%', transform: 'translateX(-50%)', width: '85%', maxWidth: '380px', zIndex: 20 }}>
+      <div style={{ position: 'fixed', bottom: '30px', left: '50%', transform: 'translateX(-50%)', width: '90%', maxWidth: '380px', zIndex: 20 }}>
         
-        {/* دراورها */}
         <div style={{ 
           width: '280px', margin: '0 auto 15px', 
           backgroundColor: isDarkMode ? 'rgba(34, 34, 34, 0.95)' : 'rgba(255, 255, 255, 0.98)', 
@@ -187,7 +183,6 @@ export default function FanoosApp() {
           )}
         </div>
 
-        {/* نوار منو */}
         <nav style={{ 
           backgroundColor: isDarkMode ? 'rgba(30, 30, 30, 0.4)' : 'rgba(255, 255, 255, 0.7)', 
           backdropFilter: 'blur(20px)', height: '80px', borderRadius: '25px', display: 'flex', 
@@ -233,9 +228,12 @@ function PostCard({ post, index, fontSize, themeColor, isDarkMode, onTagClick }:
       initial={{ opacity: 0, y: 30 }} animate={{ opacity: 1, y: 0 }} transition={{ delay: index * 0.1 }}
       onMouseEnter={() => setIsHovered(true)} onMouseLeave={() => setIsHovered(false)}
       style={{ 
-        backgroundColor: isDarkMode ? '#1e1e1e' : 'white', padding: '25px', borderRadius: '30px', position: 'relative', overflow: 'hidden',
+        backgroundColor: isDarkMode ? '#1e1e1e' : 'white', 
+        padding: '20px', // پدینگ کارت هم کمتر شد برای فضای بیشتر
+        borderRadius: '30px', position: 'relative', overflow: 'hidden',
         border: isDarkMode ? '1px solid #333' : '1px solid rgba(0,0,0,0.02)',
-        boxShadow: isDarkMode ? '0 8px 30px rgba(0,0,0,0.2)' : '0 8px 30px rgba(0,0,0,0.04)', transition: '0.3s'
+        boxShadow: isDarkMode ? '0 8px 30px rgba(0,0,0,0.2)' : '0 8px 30px rgba(0,0,0,0.04)', transition: '0.3s',
+        width: '100%', boxSizing: 'border-box'
       }}
     >
       <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center', marginBottom: '18px' }}>
