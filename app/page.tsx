@@ -128,14 +128,22 @@ export default function FanoosApp() {
         )}
       </div>
 
-      {/* بخش اصلاح شده منو و تراز */}
-      <div style={{ position: 'fixed', bottom: '30px', left: '50%', transform: 'translateX(-50%)', width: '90%', maxWidth: '380px', zIndex: 20 }}>
+      {/* بخش اصلاح شده: منوی ظریف و کاملاً وسط‌چین شده */}
+      <div style={{ 
+        position: 'fixed', 
+        bottom: '25px', 
+        left: '50%', 
+        transform: 'translateX(-50%)', 
+        width: '90%', 
+        maxWidth: '360px', 
+        zIndex: 20 
+      }}>
         
         <div style={{ 
-          width: '280px', margin: '0 auto 15px', 
+          width: '280px', margin: '0 auto 10px', 
           backgroundColor: isDarkMode ? 'rgba(34, 34, 34, 0.95)' : 'rgba(255, 255, 255, 0.98)', 
           backdropFilter: 'blur(25px)', borderRadius: '30px', 
-          padding: openDrawer ? '20px 20px 10px' : '0', 
+          padding: openDrawer ? '15px 15px 5px' : '0', 
           maxHeight: openDrawer ? '260px' : '0', 
           overflowY: 'auto', 
           boxShadow: '0 20px 60px rgba(0,0,0,0.2)', opacity: openDrawer ? 1 : 0,
@@ -185,32 +193,32 @@ export default function FanoosApp() {
 
         <nav style={{ 
           backgroundColor: isDarkMode ? 'rgba(30, 30, 30, 0.7)' : 'rgba(255, 255, 255, 0.85)', 
-          backdropFilter: 'blur(20px)', height: '80px', borderRadius: '25px', display: 'flex', 
+          backdropFilter: 'blur(20px)', height: '70px', borderRadius: '25px', display: 'flex', 
           justifyContent: 'space-around', alignItems: 'center', padding: '0 10px',
           boxShadow: '0 10px 40px rgba(0,0,0,0.1)', border: '1px solid rgba(255,255,255,0.2)', width: '100%'
         }}>
           <div onClick={() => { setActiveTab('home'); setSelectedCategory(null); setSelectedTag(null); setSearchQuery(''); setOpenDrawer(null); window.scrollTo({ top: 0, behavior: 'smooth' }); }} style={{ ...navItem, color: activeTab === 'home' ? themeColor : '#ccc' }}>
-            <svg width="24" height="24" viewBox="0 0 24 24" fill="currentColor"><path d="M11.47 3.84a.75.75 0 011.06 0l8.69 8.69a.75.75 0 101.06-1.06l-8.689-8.69a2.25 2.25 0 00-3.182 0l-8.69 8.69a.75.75 0 001.061 1.06l8.69-8.69z" /><path d="M12 5.432l8.159 8.159c.03.03.06.058.091.086v6.198c0 1.035-.84 1.875-1.875 1.875H15a.75.75 0 01-.75-.75v-4.5a.75.75 0 00-.75-.75h-3a.75.75 0 00-.75.75V21a.75.75 0 01-.75.75H5.625a1.875 1.875 0 01-1.875-1.875v-6.198a2.29 2.29 0 00-.086L12 5.432z" /></svg>
+            <svg width="22" height="22" viewBox="0 0 24 24" fill="currentColor"><path d="M11.47 3.84a.75.75 0 011.06 0l8.69 8.69a.75.75 0 101.06-1.06l-8.689-8.69a2.25 2.25 0 00-3.182 0l-8.69 8.69a.75.75 0 001.061 1.06l8.69-8.69z" /><path d="M12 5.432l8.159 8.159c.03.03.06.058.091.086v6.198c0 1.035-.84 1.875-1.875 1.875H15a.75.75 0 01-.75-.75v-4.5a.75.75 0 00-.75-.75h-3a.75.75 0 00-.75.75V21a.75.75 0 01-.75.75H5.625a1.875 1.875 0 01-1.875-1.875v-6.198a2.29 2.29 0 00-.086L12 5.432z" /></svg>
             <span style={{...navText, color: activeTab === 'home' ? themeColor : '#888'}}>خانه</span>
           </div>
           
           <div onClick={() => setOpenDrawer(openDrawer === 'cat' ? null : 'cat')} style={{ ...navItem, color: (activeTab === 'cat' || openDrawer === 'cat') ? themeColor : '#ccc' }}>
-            <svg width="24" height="24" fill="none" stroke="currentColor" strokeWidth="2.5" viewBox="0 0 24 24"><path d="M4 6h16M4 12h16m-7 6h7" /></svg>
+            <svg width="22" height="22" fill="none" stroke="currentColor" strokeWidth="2.5" viewBox="0 0 24 24"><path d="M4 6h16M4 12h16m-7 6h7" /></svg>
             <span style={{...navText, color: (activeTab === 'cat' || openDrawer === 'cat') ? themeColor : '#888'}}>{selectedCategory && selectedCategory !== 'همه' ? selectedCategory : 'دسته'}</span>
           </div>
 
           <div onClick={() => setOpenDrawer(openDrawer === 'color' ? null : 'color')} style={{ ...navItem, color: (openDrawer === 'color') ? themeColor : '#ccc' }}>
-            <svg width="24" height="24" fill="none" stroke="currentColor" strokeWidth="2.5" viewBox="0 0 24 24"><path d="M7 21a4 4 0 01-4-4V5a2 2 0 012-2h4a2 2 0 012 2v12a4 4 0 01-4 4zm0 0h12a2 2 0 002-2v-4a2 2 0 00-2-2h-2.343M11 7.343l1.657-1.657a2 2 0 012.828 0l2.829 2.829a2 2 0 010 2.828l-8.486 8.485M7 17h.01"/></svg>
+            <svg width="22" height="22" fill="none" stroke="currentColor" strokeWidth="2.5" viewBox="0 0 24 24"><path d="M7 21a4 4 0 01-4-4V5a2 2 0 012-2h4a2 2 0 012 2v12a4 4 0 01-4 4zm0 0h12a2 2 0 002-2v-4a2 2 0 00-2-2h-2.343M11 7.343l1.657-1.657a2 2 0 012.828 0l2.829 2.829a2 2 0 010 2.828l-8.486 8.485M7 17h.01"/></svg>
             <span style={{...navText, color: (openDrawer === 'color') ? themeColor : '#888'}}>رنگ</span>
           </div>
 
           <div onClick={() => {setIsDarkMode(!isDarkMode); setOpenDrawer(null)}} style={{ ...navItem }}>
-            {isDarkMode ? <svg width="24" height="24" fill="none" stroke="#ccc" strokeWidth="2.5" viewBox="0 0 24 24"><path d="M12 3v1m0 16v1m9-9h-1M4 12H3m15.364-6.364l-.707.707M6.343 17.657l-.707.707m12.728 0l-.707-.707M6.343 6.343l-.707-.707M12 8a4 4 0 100 8 4 4 0 000-8z" /></svg> : <svg width="24" height="24" viewBox="0 0 24 24" fill="#ccc"><path d="M9.528 1.718a.75.75 0 01.162.819A8.97 8.97 0 009 6a9 9 0 009 9 8.97 8.97 0 003.463-.69.75.75 0 01.981.98 10.503 10.503 0 01-9.694 6.46c-5.799 0-10.5-4.701-10.5-10.5 0-4.368 2.667-8.112 6.46-9.694a.75.75 0 01.818.162z" /></svg>}
+            {isDarkMode ? <svg width="22" height="22" fill="none" stroke="#ccc" strokeWidth="2.5" viewBox="0 0 24 24"><path d="M12 3v1m0 16v1m9-9h-1M4 12H3m15.364-6.364l-.707.707M6.343 17.657l-.707.707m12.728 0l-.707-.707M6.343 6.343l-.707-.707M12 8a4 4 0 100 8 4 4 0 000-8z" /></svg> : <svg width="22" height="22" viewBox="0 0 24 24" fill="#ccc"><path d="M9.528 1.718a.75.75 0 01.162.819A8.97 8.97 0 009 6a9 9 0 009 9 8.97 8.97 0 003.463-.69.75.75 0 01.981.98 10.503 10.503 0 01-9.694 6.46c-5.799 0-10.5-4.701-10.5-10.5 0-4.368 2.667-8.112 6.46-9.694a.75.75 0 01.818.162z" /></svg>}
             <span style={{...navText, color: '#888'}}>تم</span>
           </div>
 
           <div onClick={() => {setFontSize(fontSize >= 28 ? 16 : fontSize + 3); setOpenDrawer(null)}} style={{ ...navItem }}>
-            <div style={{ width: '32px', height: '32px', backgroundColor: themeColor, borderRadius: '50%', color: 'white', display: 'flex', justifyContent: 'center', alignItems: 'center', fontSize: '11px', fontWeight: '900' }}>Aa</div>
+            <div style={{ width: '28px', height: '28px', backgroundColor: themeColor, borderRadius: '50%', color: 'white', display: 'flex', justifyContent: 'center', alignItems: 'center', fontSize: '11px', fontWeight: '900' }}>Aa</div>
             <span style={{...navText, color: '#888'}}>سایز</span>
           </div>
         </nav>
@@ -270,5 +278,5 @@ function PostCard({ post, index, fontSize, themeColor, isDarkMode, onTagClick }:
 }
 
 const btnStyle = { background: 'none', border: 'none', cursor: 'pointer', display: 'flex', alignItems: 'center', transition: '0.2s' };
-const navItem = { display: 'flex', flexDirection: 'column' as const, alignItems: 'center', gap: '5px', cursor: 'pointer', flex: 1, transition: '0.3s' };
-const navText = { fontSize: '10px', fontWeight: '800' };
+const navItem = { display: 'flex', flexDirection: 'column' as const, alignItems: 'center', gap: '2px', cursor: 'pointer', flex: 1, transition: '0.3s', padding: '5px 0' };
+const navText = { fontSize: '9.5px', fontWeight: '700' };
