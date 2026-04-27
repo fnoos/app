@@ -1,5 +1,5 @@
 'use client'
-
+import slogans from './slogans.json';
 import { useState, useEffect, useMemo } from 'react';
 import { motion, AnimatePresence } from 'framer-motion';
 import { supabase } from '@/lib/supabase';
@@ -14,8 +14,15 @@ export default function FanoosApp() {
   const [selectedCategory, setSelectedCategory] = useState<string>('همه');
   const [searchQuery, setSearchQuery] = useState('');
   const [dynamicCategories, setDynamicCategories] = useState<string[]>(['همه']);
-
+  const [currentSlogan, setCurrentSlogan] = useState('');
+  
   useEffect(() => {
+    // انتخاب شعار تصادفی از فایل JSON
+    if (slogans && slogans.length > 0) {
+      const randomIndex = Math.floor(Math.random() * slogans.length);
+      setCurrentSlogan(slogans[randomIndex]);
+    }
+
     async function fetchPosts() {
       setLoading(true);
       const { data, error } = await supabase
@@ -164,6 +171,10 @@ export default function FanoosApp() {
           <IconSmile themeColor={themeColor} />
         </div>
         <h1 style={{ color: themeColor, fontSize: '48px', fontWeight: '900', margin: 0 }}>فـانـوس</h1>
+        {/* کد سوم: نمایش شعار تصادفی */}
+        <p style={{ color: isDarkMode ? '#888' : '#666', fontSize: '14px', fontWeight: '700', marginTop: '8px', marginBottom: '15px' }}>
+          {currentSlogan}
+        </p>
       </div>
 
       <div style={{ padding: '20px 12px', display: 'flex', flexDirection: 'column', gap: '20px', paddingBottom: '160px', maxWidth: '480px', margin: '0 auto' }}>
