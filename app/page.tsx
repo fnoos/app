@@ -85,27 +85,10 @@ export default function FanoosApp() {
         .hashtag-link { color: ${themeColor}; text-decoration: none; font-weight: 800; cursor: pointer; }
         .copy-feedback { position: fixed; background: #333; color: #fff; padding: 6px 12px; border-radius: 10px; font-size: 12px; z-index: 1000; pointer-events: none; transition: 0.4s; }
         .fade-out { opacity: 0; transform: translateY(-10px); }
-        
-        /* اصلاح بخش آیکون‌های اجتماعی هنگام کلیک */
-        .social-icon { 
-          transition: 0.3s; 
-          display: flex; 
-          align-items: center; 
-          justify-content: center; 
-          width: 45px; 
-          height: 45px; 
-          border-radius: 50%;
-        }
+        .social-icon { transition: 0.3s; display: flex; align-items: center; justify-content: center; width: 45px; height: 45px; border-radius: 50%; }
         .social-icon img { transition: 0.3s; filter: ${isDarkMode ? 'invert(1)' : 'none'}; }
-        
-        .social-icon:active {
-          background-color: ${themeColor};
-          transform: scale(0.9);
-        }
-        /* آیکون هنگام کلیک به رنگ پس‌زمینه در می‌آید */
-        .social-icon:active img { 
-          filter: ${isDarkMode ? 'brightness(0)' : 'brightness(0) invert(1)'};
-        }
+        .social-icon:active { background-color: ${themeColor}; transform: scale(0.9); }
+        .social-icon:active img { filter: ${isDarkMode ? 'brightness(0)' : 'brightness(0) invert(1)'}; }
       `}</style>
       
       <AnimatePresence>
@@ -132,44 +115,41 @@ export default function FanoosApp() {
               onClick={(e) => e.stopPropagation()}
               style={{ 
                 backgroundColor: isDarkMode ? '#1e1e1e' : '#fff', 
-                borderRadius: '45px', 
-                padding: '40px 30px', 
+                borderRadius: '40px', 
+                padding: '30px 25px', 
                 maxWidth: '380px', 
                 width: '100%', 
-                height: 'auto',
-                minHeight: '650px', 
+                height: 'auto', 
                 textAlign: 'center', 
                 boxShadow: '0 25px 70px rgba(0,0,0,0.3)',
                 display: 'flex',
-                flexDirection: 'column',
-                justifyContent: 'space-between'
+                flexDirection: 'column'
               }}
             >
-              <div>
-                <h2 style={{ color: themeColor, fontWeight: '900', fontSize: '28px', marginBottom: '25px' }}>درباره فانوس</h2>
-                <p style={{ color: isDarkMode ? '#eee' : '#333', lineHeight: '2.2', fontSize: '17px', textAlign: 'right', direction: 'rtl' }}>
-                  <strong style={{ fontSize: '19px', display: 'block', marginBottom: '20px', fontWeight: '900' }}>فانوس | رفیقِ شب‌های تردید 🌙</strong>
-                 <p style={{ margin: '0 0 15px 0' }}>
-                  همه ما شب‌هایی را داشته‌ایم که سوالات مثل خوره به جانمان افتاده‌اند. اینجا نه قرار است نصیحت بشنوی و نه قرار است با کلماتِ سنگین محاصره شوی. ما فقط فانوسی را بالا گرفته‌ایم تا در کنار هم، راه را از بیراهه، و حقیقت را از نمایش‌های ساختگی تشخیص دهیم.
-                </p>
-
-                <p style={{ margin: '0 0 15px 0' }}>
-                  قلبِ تو بزرگ‌تر از آن است که در قفسِ «پوچی» بماند.
-                </p>
-
-                <p style={{ margin: '0' }}>
-                  بیا با هم، از نو شروع کنیم. 🤍
-                </p>
-                </p>
+              <div style={{ textAlign: 'right', direction: 'rtl' }}>
+                <h2 style={{ color: themeColor, fontWeight: '900', fontSize: '24px', marginBottom: '15px', textAlign: 'center' }}>درباره فانوس</h2>
+                <strong style={{ fontSize: '18px', display: 'block', marginBottom: '10px', fontWeight: '900', color: themeColor }}>فانوس | رفیقِ شب‌های تردید 🌙</strong>
+                
+                <div style={{ color: isDarkMode ? '#eee' : '#333', lineHeight: '1.7', fontSize: '15px', textAlign: 'justify' }}>
+                  <p style={{ margin: '0 0 10px 0' }}>
+                    همه ما شب‌هایی را داشته‌ایم که سوالات مثل خوره به جانمان افتاده‌اند. اینجا نه قرار است نصیحت بشنوی و نه قرار است با کلماتِ سنگین محاصره شوی. ما فقط فانوسی را بالا گرفته‌ایم تا در کنار هم، راه را از بیراهه، و حقیقت را از نمایش‌های ساختگی تشخیص دهیم.
+                  </p>
+                  <p style={{ margin: '0 0 10px 0' }}>
+                    قلبِ تو بزرگ‌تر از آن است که در قفسِ «پوچی» بماند.
+                  </p>
+                  <p style={{ margin: '0' }}>
+                    بیا با هم، از نو شروع کنیم. 🤍
+                  </p>
+                </div>
               </div>
 
               <div>
-                <div style={{ display: 'flex', justifyContent: 'center', gap: '20px', marginBottom: '30px', borderTop: isDarkMode ? '1px solid #333' : '1px solid #eee', paddingTop: '30px' }}>
+                <div style={{ display: 'flex', justifyContent: 'center', gap: '20px', marginBottom: '20px', borderTop: isDarkMode ? '1px solid #333' : '1px solid #eee', marginTop: '20px', paddingTop: '20px' }}>
                   <a href="https://t.me/fanoosarea" target="_blank" rel="noreferrer" className="social-icon"><IconTelegram /></a>
                   <a href="https://instagram.com/fanoosarea" target="_blank" rel="noreferrer" className="social-icon"><IconInsta /></a>
                   <a href="https://tiktok.com/@fanoosarea" target="_blank" rel="noreferrer" className="social-icon"><IconTiktok /></a>
                 </div>
-                <button onClick={() => setOpenDrawer(null)} style={{ backgroundColor: themeColor, color: '#fff', border: 'none', padding: '15px 50px', borderRadius: '22px', fontWeight: 'bold', fontSize: '16px', cursor: 'pointer', width: '100%' }}>بستن پنجره</button>
+                <button onClick={() => setOpenDrawer(null)} style={{ backgroundColor: themeColor, color: '#fff', border: 'none', padding: '12px', borderRadius: '20px', fontWeight: 'bold', fontSize: '15px', cursor: 'pointer', width: '100%' }}>بستن پنجره</button>
               </div>
             </motion.div>
           </motion.div>
@@ -327,7 +307,6 @@ function PostCard({ post, fontSize, themeColor, isDarkMode, setSearchQuery }: an
   );
 }
 
-// Icons
 const navItem = { display: 'flex', flexDirection: 'column' as const, alignItems: 'center', gap: '5px', flex: 1, cursor: 'pointer' };
 const navText = { fontSize: '12px', fontWeight: '700' };
 const IconHome = ({color}: any) => <svg width="24" height="24" fill={color} viewBox="0 0 24 24"><path d="M11.47 3.84a.75.75 0 011.06 0l8.69 8.69a.75.75 0 101.06-1.06l-8.689-8.69a2.25 2.25 0 00-3.182 0l-8.69 8.69a.75.75 0 001.061 1.06l8.69-8.69z" /><path d="M12 5.432l8.159 8.159c.03.03.06.058.091.086v6.198c0 1.035-.84 1.875-1.875 1.875H15a.75.75 0 01-.75-.75v-4.5a.75.75 0 00-.75-.75h-3a.75.75 0 00-.75.75V21a.75.75 0 01-.75.75H5.625a1.875 1.875 0 01-1.875-1.875v-6.198a2.29 2.29 0 00-.086L12 5.432z" /></svg>;
@@ -341,23 +320,9 @@ const IconColor = ({color}: any) => (
     <path d="M7 21a4 4 0 01-4-4V5a2 2 0 012-2h4a2 2 0 012 2v12a4 4 0 01-4 4zm0 0h12a2 2 0 002-2v-4a2 2 0 00-2-2h-2.343M11 7.343l1.657-1.657a2 2 0 012.828 0l2.829 2.829a2 2 0 010 2.828l-8.486 8.485M7 17h.01"/>
   </svg>
 );
-
 const IconSmile = ({themeColor}: any) => (
-  <div style={{ 
-    width: '28px', 
-    height: '28px', 
-    backgroundColor: themeColor, 
-    WebkitMaskImage: 'url("/smile.svg")', 
-    maskImage: 'url("/smile.svg")',
-    WebkitMaskRepeat: 'no-repeat',
-    maskRepeat: 'no-repeat',
-    WebkitMaskPosition: 'center',
-    maskPosition: 'center',
-    WebkitMaskSize: 'contain',
-    maskSize: 'contain'
-  }} />
+  <div style={{ width: '28px', height: '28px', backgroundColor: themeColor, WebkitMaskImage: 'url("/smile.svg")', maskImage: 'url("/smile.svg")', WebkitMaskRepeat: 'no-repeat', maskRepeat: 'no-repeat', WebkitMaskPosition: 'center', maskPosition: 'center', WebkitMaskSize: 'contain', maskSize: 'contain' }} />
 );
-
 const IconTelegram = () => <img src="/tel.svg" alt="Telegram" width="28" height="28" />;
 const IconInsta = () => <img src="/insta.svg" alt="Instagram" width="28" height="28" />;
 const IconTiktok = () => <img src="/tik.svg" alt="Tiktok" width="28" height="28" />;
