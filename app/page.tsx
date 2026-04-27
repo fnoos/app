@@ -259,7 +259,7 @@ function PostCard({ post, fontSize, themeColor, isDarkMode, setSearchQuery }: an
   const handleShare = async (e: any) => {
     e.stopPropagation();
     const plainText = post.content.replace(/<[^>]*>/g, '').trim();
-    const shareMessage = `${plainText}\n\n✨ فـانـوس\n---------------------------\nهمراه ما باشید در:\n\nتلگــــرام: t.me/fanoosarea\nاینستــــا: instagram.com/fanoosarea\nتیک تاک: tiktok.com/@fanoosarea\nســــایت: https://fa.fanos.workers.dev`;
+    const shareMessage = `${plainText}\n\n✨ فـانـوس\n---------------------------\nهمراه ما باشید در:\n\nتلگــــرام: t.me/fanoosarea\nاینستــــا: instagram.com/fanoosarea\nتیک تاک: tiktok.com/@fanoosarea\nســــایت: https://fanoosarea.vercel.app`;
     try {
       await navigator.clipboard.writeText(shareMessage);
       showFeedback(e);
