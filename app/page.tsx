@@ -99,7 +99,7 @@ export default function FanoosApp() {
   return (
     <main style={{ 
       minHeight: '100vh', 
-      backgroundColor: isDarkMode ? '#121212' : `${themeColor}15`, 
+      backgroundColor: isDarkMode ? '#121212' : `${themeColor}10`, 
       transition: '0.4s', 
       direction: 'rtl' 
     }}>
