@@ -13,6 +13,8 @@ export default function FanoosApp() {
   const [themeColor, setThemeColor] = useState('#10b981'); 
   const [selectedCategory, setSelectedCategory] = useState<string>('همه');
   const [searchQuery, setSearchQuery] = useState('');
+  // متغیر جدید برای ذخیره دسته‌های پویا
+  const [dynamicCategories, setDynamicCategories] = useState<string[]>(['همه']);
 
   useEffect(() => {
     async function fetchPosts() {
@@ -21,7 +23,12 @@ export default function FanoosApp() {
         .from('posts')
         .select('*')
         .order('id', { ascending: false });
-      if (!error) setPosts(data || []);
+      if (!error && data) {
+        setPosts(data);
+        // استخراج دسته‌بندی‌های منحصربه‌فرد از پست‌ها
+        const uniqueCats = Array.from(new Set(data.map((p: any) => p.category).filter(Boolean)));
+        setDynamicCategories(['همه', ...uniqueCats as string[]]);
+      }
       setLoading(false);
     }
     fetchPosts();
@@ -35,7 +42,6 @@ export default function FanoosApp() {
     }
   }, [openDrawer]);
 
-  const categories = ['همه', 'اخلاق اسلامی', 'حال خوب', 'چرا؟', 'عمومی'];
   const colors = ['#a78bfa', '#38bdf8', '#fb7185', '#10b981', '#ffb088'];
   
   const cleanText = (text: string) => 
@@ -44,11 +50,10 @@ export default function FanoosApp() {
         .replace(/ی/g, 'ی').replace(/ک/g, 'ک')
         .trim() || '';
 
-  // اصلاح دکمه خانه: پاک کردن جستجو + بازگشت به همه + اسکرول به بالا
   const scrollToTop = () => {
     window.scrollTo({ top: 0, behavior: 'smooth' });
-    setSearchQuery(''); // پاک کردن هشتگ یا جستجوی قبلی
-    setSelectedCategory('همه'); // بازگشت به حالت نمایش همه پست‌ها
+    setSearchQuery('');
+    setSelectedCategory('همه');
     setOpenDrawer(null);
   };
 
@@ -57,13 +62,11 @@ export default function FanoosApp() {
       const postCat = cleanText(p.category);
       const targetCat = cleanText(selectedCategory);
       
-      // اگر در حال جستجو هستیم، فقط بر اساس متن/هشتگ فیلتر کن
       if (searchQuery !== '') {
         return p.content.toLowerCase().includes(searchQuery.toLowerCase()) || 
                (p.hashtags && p.hashtags.includes(searchQuery));
       }
       
-      // در غیر این صورت بر اساس دسته بندی فیلتر کن
       return selectedCategory === 'همه' || postCat === targetCat;
     });
   }, [posts, selectedCategory, searchQuery]);
@@ -124,11 +127,11 @@ export default function FanoosApp() {
         <AnimatePresence>
           {openDrawer === 'cat' && (
             <motion.div initial={{ opacity: 0, y: 20 }} animate={{ opacity: 1, y: 0 }} exit={{ opacity: 0, y: 20 }} style={{ width: '100%', marginBottom: '12px', backgroundColor: isDarkMode ? '#222' : '#fff', borderRadius: '25px', padding: '15px', boxShadow: '0 20px 50px rgba(0,0,0,0.15)' }}>
-              <div style={{ display: 'grid', gridTemplateColumns: '1fr 1fr', gap: '10px' }}>
-                {categories.map(cat => (
+              <div style={{ display: 'grid', gridTemplateColumns: '1fr 1fr', gap: '10px', maxHeight: '300px', overflowY: 'auto' }}>
+                {dynamicCategories.map(cat => (
                   <div key={cat} onClick={() => {
                     setSelectedCategory(cat); 
-                    setSearchQuery(''); // وقتی دسته عوض می‌شود، هشتگ قبلی پاک شود
+                    setSearchQuery('');
                     setOpenDrawer(null);
                   }} style={{ padding: '12px', textAlign: 'center', borderRadius: '15px', backgroundColor: selectedCategory === cat ? themeColor : 'rgba(128,128,128,0.05)', color: selectedCategory === cat ? '#fff' : (isDarkMode ? '#bbb' : '#555'), fontWeight: '700', cursor: 'pointer', fontSize: '13px' }}>{cat}</div>
                 ))}
@@ -243,7 +246,6 @@ function PostCard({ post, fontSize, themeColor, isDarkMode, setSearchQuery }: an
   );
 }
 
-// Icons
 const navItem = { display: 'flex', flexDirection: 'column' as const, alignItems: 'center', gap: '5px', flex: 1, cursor: 'pointer' };
 const navText = { fontSize: '12px', fontWeight: '700' };
 const IconHome = ({color}: any) => <svg width="24" height="24" fill={color} viewBox="0 0 24 24"><path d="M11.47 3.84a.75.75 0 011.06 0l8.69 8.69a.75.75 0 101.06-1.06l-8.689-8.69a2.25 2.25 0 00-3.182 0l-8.69 8.69a.75.75 0 001.061 1.06l8.69-8.69z" /><path d="M12 5.432l8.159 8.159c.03.03.06.058.091.086v6.198c0 1.035-.84 1.875-1.875 1.875H15a.75.75 0 01-.75-.75v-4.5a.75.75 0 00-.75-.75h-3a.75.75 0 00-.75.75V21a.75.75 0 01-.75.75H5.625a1.875 1.875 0 01-1.875-1.875v-6.198a2.29 2.29 0 00-.086L12 5.432z" /></svg>;
