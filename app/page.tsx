@@ -9,7 +9,6 @@ export default function FanoosApp() {
   const [loading, setLoading] = useState(true);
   const [openDrawer, setOpenDrawer] = useState<null | 'cat' | 'color' | 'about'>(null);
   
-  // مقداردهی اولیه استیت‌ها از localStorage (برای قفل شدن تنظیمات)
   const [isDarkMode, setIsDarkMode] = useState(false);
   const [fontSize, setFontSize] = useState(19);
   const [themeColor, setThemeColor] = useState('#10b981'); 
@@ -19,7 +18,6 @@ export default function FanoosApp() {
   const [dynamicCategories, setDynamicCategories] = useState<string[]>(['همه']);
   const [currentSlogan, setCurrentSlogan] = useState('');
 
-  // ۱. افکت برای بارگذاری تنظیمات ذخیره شده هنگام لود اولیه
   useEffect(() => {
     const savedDark = localStorage.getItem('fanoos_dark');
     const savedColor = localStorage.getItem('fanoos_color');
@@ -30,7 +28,6 @@ export default function FanoosApp() {
     if (savedSize !== null) setFontSize(parseInt(savedSize));
   }, []);
 
-  // ۲. افکت برای ذخیره تنظیمات به محض هر تغییر (قفل کردن)
   useEffect(() => {
     localStorage.setItem('fanoos_dark', isDarkMode.toString());
     localStorage.setItem('fanoos_color', themeColor);
@@ -82,16 +79,43 @@ export default function FanoosApp() {
     setOpenDrawer(null);
   };
 
-  const filteredPosts = useMemo(() => {
+const filteredPosts = useMemo(() => {
     return posts.filter(p => {
-      const postCat = cleanText(p.category);
-      const targetCat = cleanText(selectedCategory);
+      // ۱. مدیریت دسته‌بندی
+      const postCat = p.category ? p.category.trim() : '';
+      const targetCat = selectedCategory.trim();
       
+      // اگر در حال جستجو هستیم
       if (searchQuery !== '') {
-        return p.content.toLowerCase().includes(searchQuery.toLowerCase()) || 
-               (p.hashtags && p.hashtags.includes(searchQuery));
+        // الف) ساده‌سازی کوئری: حذف آندرلاین، نیم‌فاصله و فاصله‌های اضافه
+        const normalizedQuery = searchQuery
+          .replace(/_/g, '')
+          .replace(/\u200c/g, '')
+          .replace(/\s/g, '')
+          .toLowerCase();
+
+        // ب) ساده‌سازی متن محتوا
+        const normalizedContent = (p.content || '')
+          .replace(/_/g, '')
+          .replace(/\u200c/g, '')
+          .replace(/\s/g, '')
+          .toLowerCase();
+
+        // ج) ساده‌سازی هشتگ‌ها
+        const normalizedHashtags = (p.hashtags || '')
+          .replace(/_/g, '')
+          .replace(/\u200c/g, '')
+          .replace(/\s/g, '')
+          .toLowerCase();
+
+        // بررسی اینکه آیا کوئری در متن یا هشتگ هست یا نه
+        const isMatch = normalizedContent.includes(normalizedQuery) || 
+                        normalizedHashtags.includes(normalizedQuery);
+        
+        return isMatch;
       }
       
+      // اگر جستجو نیست، فقط بر اساس دسته‌بندی فیلتر کن
       return selectedCategory === 'همه' || postCat === targetCat;
     });
   }, [posts, selectedCategory, searchQuery]);
@@ -99,7 +123,7 @@ export default function FanoosApp() {
   return (
     <main style={{ 
       minHeight: '100vh', 
-      backgroundColor: isDarkMode ? '#121212' : `${themeColor}10`, 
+      backgroundColor: isDarkMode ? '#121212' : `${themeColor}15`, 
       transition: '0.4s', 
       direction: 'rtl' 
     }}>
@@ -305,20 +329,30 @@ function PostCard({ post, fontSize, themeColor, isDarkMode, setSearchQuery }: an
 
   const renderHashtags = (tags: string) => {
     if (!tags) return null;
-    return tags.split(' ').filter(t => t.trim() !== "").map((tag, i) => (
-      <span key={i} className="hashtag-link" onClick={() => {
-        window.scrollTo({ top: 0, behavior: 'smooth' });
-        setSearchQuery(tag);
-      }} style={{ marginLeft: '8px' }}>
-        {tag.startsWith('#') ? tag : `#${tag}`}
-      </span>
-    ));
+    // منطق جدید: "دو فاصله" جداکننده هشتگ‌هاست
+    return tags.split('  ').filter(t => t.trim() !== "").map((tag, i) => {
+      // "تک فاصله" تبدیل به آندرلاین می‌شود تا یک هشتگ واحد ایجاد شود
+      const internalTag = tag.trim().replace(/ /g, '_');
+      const fullTag = internalTag.startsWith('#') ? internalTag : `#${internalTag}`;
+      
+      // برای نمایش بصری، آندرلاین را حذف و نیم‌فاصله می‌گذاریم تا حروف نچسبند
+      const visualTag = fullTag.replace(/_/g, '\u200c');
+
+      return (
+        <span key={i} className="hashtag-link" onClick={() => {
+          window.scrollTo({ top: 0, behavior: 'smooth' });
+          setSearchQuery(internalTag); 
+        }} style={{ marginLeft: '12px' }}>
+          {visualTag}
+        </span>
+      );
+    });
   };
 
   return (
     <motion.article className="post-card" initial={{ opacity: 0 }} animate={{ opacity: 1 }} style={{ backgroundColor: isDarkMode ? '#1e1e1e' : '#fff', padding: '25px', borderRadius: '35px', border: isDarkMode ? '1px solid #333' : '1px solid #f0f0f0', position: 'relative' }}>
       <div style={{ display: 'flex', justifyContent: 'space-between', marginBottom: '15px', alignItems: 'center' }}>
-        <span style={{ backgroundColor: `${themeColor}15`, color: themeColor, padding: '5px 12px', borderRadius: '12px', fontWeight: '900', fontSize: '15px' }}>{post.category}</span>
+        <span style={{ backgroundColor: `${themeColor}15`, color: themeColor, padding: '8px 16px', borderRadius: '12px', fontWeight: '900', fontSize: '14px' }}>{post.category}</span>
         <span style={{ color: '#bbb', fontSize: '13px' }}>{post.date}</span>
       </div>
       <p style={{ fontSize: `${fontSize}px`, lineHeight: '1.8', color: isDarkMode ? '#eee' : '#444', textAlign: 'justify', textJustify: 'inter-word', whiteSpace: 'pre-line' }} dangerouslySetInnerHTML={{ __html: post.content }} />
