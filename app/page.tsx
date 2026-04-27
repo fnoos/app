@@ -8,16 +8,36 @@ export default function FanoosApp() {
   const [posts, setPosts] = useState<any[]>([]);
   const [loading, setLoading] = useState(true);
   const [openDrawer, setOpenDrawer] = useState<null | 'cat' | 'color' | 'about'>(null);
+  
+  // مقداردهی اولیه استیت‌ها از localStorage (برای قفل شدن تنظیمات)
   const [isDarkMode, setIsDarkMode] = useState(false);
   const [fontSize, setFontSize] = useState(19);
   const [themeColor, setThemeColor] = useState('#10b981'); 
+
   const [selectedCategory, setSelectedCategory] = useState<string>('همه');
   const [searchQuery, setSearchQuery] = useState('');
   const [dynamicCategories, setDynamicCategories] = useState<string[]>(['همه']);
   const [currentSlogan, setCurrentSlogan] = useState('');
+
+  // ۱. افکت برای بارگذاری تنظیمات ذخیره شده هنگام لود اولیه
+  useEffect(() => {
+    const savedDark = localStorage.getItem('fanoos_dark');
+    const savedColor = localStorage.getItem('fanoos_color');
+    const savedSize = localStorage.getItem('fanoos_size');
+
+    if (savedDark !== null) setIsDarkMode(savedDark === 'true');
+    if (savedColor !== null) setThemeColor(savedColor);
+    if (savedSize !== null) setFontSize(parseInt(savedSize));
+  }, []);
+
+  // ۲. افکت برای ذخیره تنظیمات به محض هر تغییر (قفل کردن)
+  useEffect(() => {
+    localStorage.setItem('fanoos_dark', isDarkMode.toString());
+    localStorage.setItem('fanoos_color', themeColor);
+    localStorage.setItem('fanoos_size', fontSize.toString());
+  }, [isDarkMode, themeColor, fontSize]);
   
   useEffect(() => {
-    // انتخاب شعار تصادفی از فایل JSON
     if (slogans && slogans.length > 0) {
       const randomIndex = Math.floor(Math.random() * slogans.length);
       setCurrentSlogan(slogans[randomIndex]);
@@ -79,7 +99,7 @@ export default function FanoosApp() {
   return (
     <main style={{ 
       minHeight: '100vh', 
-      backgroundColor: isDarkMode ? '#121212' : `${themeColor}05`, 
+      backgroundColor: isDarkMode ? '#121212' : `${themeColor}15`, 
       transition: '0.4s', 
       direction: 'rtl' 
     }}>
@@ -171,7 +191,6 @@ export default function FanoosApp() {
           <IconSmile themeColor={themeColor} />
         </div>
         <h1 style={{ color: themeColor, fontSize: '48px', fontWeight: '900', margin: 0 }}>فـانـوس</h1>
-        {/* کد سوم: نمایش شعار تصادفی */}
         <p style={{ color: isDarkMode ? '#888' : '#666', fontSize: '14px', fontWeight: '700', marginTop: '8px', marginBottom: '15px' }}>
           {currentSlogan}
         </p>
@@ -299,8 +318,8 @@ function PostCard({ post, fontSize, themeColor, isDarkMode, setSearchQuery }: an
   return (
     <motion.article className="post-card" initial={{ opacity: 0 }} animate={{ opacity: 1 }} style={{ backgroundColor: isDarkMode ? '#1e1e1e' : '#fff', padding: '25px', borderRadius: '35px', border: isDarkMode ? '1px solid #333' : '1px solid #f0f0f0', position: 'relative' }}>
       <div style={{ display: 'flex', justifyContent: 'space-between', marginBottom: '15px', alignItems: 'center' }}>
-        <span style={{ backgroundColor: `${themeColor}15`, color: themeColor, padding: '5px 12px', borderRadius: '12px', fontWeight: '900', fontSize: '11px' }}>{post.category}</span>
-        <span style={{ color: '#bbb', fontSize: '11px' }}>{post.date}</span>
+        <span style={{ backgroundColor: `${themeColor}15`, color: themeColor, padding: '5px 12px', borderRadius: '12px', fontWeight: '900', fontSize: '15px' }}>{post.category}</span>
+        <span style={{ color: '#bbb', fontSize: '13px' }}>{post.date}</span>
       </div>
       <p style={{ fontSize: `${fontSize}px`, lineHeight: '1.8', color: isDarkMode ? '#eee' : '#444', textAlign: 'justify', textJustify: 'inter-word', whiteSpace: 'pre-line' }} dangerouslySetInnerHTML={{ __html: post.content }} />
       <div style={{ marginTop: '12px', display: 'flex', flexWrap: 'wrap', gap: '5px' }}>{renderHashtags(post.hashtags)}</div>
@@ -320,7 +339,7 @@ function PostCard({ post, fontSize, themeColor, isDarkMode, setSearchQuery }: an
 
 const navItem = { display: 'flex', flexDirection: 'column' as const, alignItems: 'center', gap: '5px', flex: 1, cursor: 'pointer' };
 const navText = { fontSize: '12px', fontWeight: '700' };
-const IconHome = ({color}: any) => <svg width="24" height="24" fill={color} viewBox="0 0 24 24"><path d="M11.47 3.84a.75.75 0 011.06 0l8.69 8.69a.75.75 0 101.06-1.06l-8.689-8.69a2.25 2.25 0 00-3.182 0l-8.69 8.69a.75.75 0 001.061 1.06l8.69-8.69z" /><path d="M12 5.432l8.159 8.159c.03.03.06.058.091.086v6.198c0 1.035-.84 1.875-1.875 1.875H15a.75.75 0 01-.75-.75v-4.5a.75.75 0 00-.75-.75h-3a.75.75 0 00-.75.75V21a.75.75 0 01-.75.75H5.625a1.875 1.875 0 01-1.875-1.875v-6.198a2.29 2.29 0 00-.086L12 5.432z" /></svg>;
+const IconHome = ({color}: any) => <svg width="24" height="24" fill={color} viewBox="0 0 24 24"><path d="M11.47 3.84a.75.75 0 011.06 0l8.69 8.69a.75.75 0 101.06-1.06l-8.689-8.69a2.25 2.25 0 00-3.182 0l-8.69 8.69a.75.75 0 001.061 1.06l8.69-8.69z" /><path d="M12 5.432l8.159 8.159c.03.03.06.058.091.086v6.198c0 1.035-.84 1.875-1.875 1.875H15a.75.75 0 01-.75-.75v-4.5a.75.75 0 00-.75-.75h-3a.75.75 0 00-.75.75V21a.75.75 0 01-.75.75H5.625a1.875 1.875-0 01-1.875-1.875v-6.198a2.29 2.29 0 00-.086L12 5.432z" /></svg>;
 const IconGrid = ({color}: any) => <svg width="24" height="24" fill="none" stroke={color} strokeWidth="2.5" viewBox="0 0 24 24"><path d="M4 6h16M4 12h16m-7 6h7" /></svg>;
 const IconMoon = () => <svg width="24" height="24" fill="#999" viewBox="0 0 24 24"><path d="M9.528 1.718a.75.75 0 01.162.819A8.97 8.97 0 009 6a9 9 0 009 9 8.97 8.97 0 003.463-.69.75.75 0 01.981.98 10.503 10.503 0 01-9.694 6.46c-5.799 0-10.5-4.701-10.5-10.5 0-4.368 2.667-8.112 6.46-9.694a.75.75 0 01.818.162z" /></svg>;
 const IconSun = () => <svg width="24" height="24" fill="none" stroke="#999" strokeWidth="2.5" viewBox="0 0 24 24"><path d="M12 3v1m0 16v1m9-9h-1M4 12H3m15.364-6.364l-.707.707M6.343 17.657l-.707.707m12.728 0l-.707-.707M6.343 6.343l-.707-.707M12 8a4 4 0 100 8 4 4 0 000-8z" /></svg>;
